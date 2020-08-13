@@ -1,5 +1,6 @@
 import serial
 
+
 class serOp():
     ser = serial.Serial(
             port="/dev/ttyUSB0",
@@ -8,10 +9,10 @@ class serOp():
             parity='E',
             stopbits=1,
             timeout=2)
-    isOpen = True
+    isOpen = False
 
     def __int__(self):
-        self.isOpen = True
+        self.isOpen = False
         
     def open(self):
         self.ser.open()
@@ -96,18 +97,18 @@ if __name__ == '__main__':
     com = UPComBotCommand()
     ser = serOp()
     while True:
-        # name = '01.00.Welcome_guy'
-        # print("name:", name)
-        # b_name = name.encode()
-        # command, _ = com.GenerateCmd(device=0x09, cmd=0x4B, len=len(b_name), data=b_name)
-        # print("original data:",  command)
-        # ser.write_serial(command)
+        name = '01.00.Welcome_guy'
+        print("name:", name)
+        b_name = name.encode()
+        command, _ = com.GenerateCmd(device=0x09, cmd=0x4B, len=len(b_name), data=b_name)
+        print("original data:",  command)
+        ser.write_serial(command)
 
-        # test = [0] * 1
-        # test[0] = 2 & 0xFF
-        # send_data, _ = com.GenerateCmd(device=0x09, cmd=0x4B, len=0x00, data=None)
-        # print("origin data:", send_data)
-        # ser.write_serial(send_data)
+        test = [0] * 1
+        test[0] = 2 & 0xFF
+        send_data, _ = com.GenerateCmd(device=0x09, cmd=0x4B, len=0x00, data=None)
+        print("origin data:", send_data)
+        ser.write_serial(send_data)
 
         recv_data = ser.serial_listen()
 

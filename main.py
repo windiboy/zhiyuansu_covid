@@ -8,7 +8,7 @@ class Covid():
         self.movement = Movement()
 
     def test(self):
-        self.movement.wave_hands()
+        print(self.movement.wave_hands())
 
 
 # Press the green button in the gutter to run the script.
