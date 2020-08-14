@@ -97,6 +97,22 @@ class Movement:
             return True
         return False
 
+    def action_1(self):
+        if self.isOpen:
+            command = self.cmd.action_1()
+            self.action.write_serial(command)
+            time.sleep(1)
+            return True
+        return False
+
+    def action_2(self):
+        if self.isOpen:
+            command = self.cmd.action_2()
+            self.action.write_serial(command)
+            time.sleep(1)
+            return True
+        return False
+
     def hit(self):
         if self.isOpen:
             command = self.cmd.hit()
