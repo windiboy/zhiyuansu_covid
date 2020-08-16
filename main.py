@@ -13,8 +13,15 @@ class Covid():
         self.mv.set_volume(80)
         self.mv.play_sounds('0255\\0113.WAV')#请伸出手配合体温测量
         time.sleep(3)
+        self.sensor.flushInput()#清除输入缓冲区数据
         data = self.sensor.readline()
         temperature = (data[0]-48) * 10 + (data[1]-48) + (data[3]-48) * 0.1
+        while temperature < 30:
+            self.mv.play_sounds('0255\\0113.WAV')  # 请伸出手配合体温测量
+            time.sleep(3)
+            self.sensor.flushInput()  # 清除输入缓冲区数据
+            data = self.sensor.readline()
+            temperature = (data[0] - 48) * 10 + (data[1] - 48) + (data[3] - 48) * 0.1
         self.mv.play_sounds('0255\\0112.WAV')  # 您的体温是
         time.sleep(2)
         self.mv.play_sounds('0255\\00'+str(data[0]-48)+str(data[1]-48)+'.WAV')
