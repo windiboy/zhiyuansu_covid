@@ -12,14 +12,14 @@ class Covid():
     def read_temperature(self):
         self.mv.set_volume(80)
         self.mv.play_sounds('0255\\0113.WAV')#请伸出手配合体温测量
-        time.sleep(3)
         self.sensor.flushInput()#清除输入缓冲区数据
+        time.sleep(3)
         data = self.sensor.readline()
         temperature = (data[0]-48) * 10 + (data[1]-48) + (data[3]-48) * 0.1
-        while temperature < 30:
+        while temperature < 30 or temperature > 40:
             self.mv.play_sounds('0255\\0113.WAV')  # 请伸出手配合体温测量
-            time.sleep(3)
             self.sensor.flushInput()  # 清除输入缓冲区数据
+            time.sleep(3)
             data = self.sensor.readline()
             temperature = (data[0] - 48) * 10 + (data[1] - 48) + (data[3] - 48) * 0.1
         self.mv.play_sounds('0255\\0112.WAV')  # 您的体温是
