@@ -57,7 +57,7 @@ class ImuSensor:
                     self.Bytenum+=1
                 else:
                     if data == (self.CheckSum&0xff):
-                    self.w = self.get_gyro(self.GYROData)
+                        self.w = self.get_gyro(self.GYROData)
                     self.CheckSum=0
                     self.Bytenum=0
                     self.FrameState=0
@@ -69,7 +69,7 @@ class ImuSensor:
                     self.Bytenum+=1
                 else:
                     if data == (self.CheckSum&0xff):
-                    self.Angle = self.get_angle(self.AngleData)
+                        self.Angle = self.get_angle(self.AngleData)
                         d = self.a+self.w+self.Angle
                         print("a(g):%10.3f %10.3f %10.3f w(deg/s):%10.3f %10.3f %10.3f Angle(deg):%10.3f %10.3f %10.3f"%d)
                     self.CheckSum=0
