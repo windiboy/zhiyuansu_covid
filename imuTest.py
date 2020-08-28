@@ -25,8 +25,9 @@ class Adjustment():
         while True:
             datahex = self.sensor.ser.read(33)
             self.sensor.DueData(datahex)
-            print("Angle Y = {:.3f}".format(self.sensor.Angle[1]))
+
             cur = self.sensor.Angle[1] - self.offset
+            print("Angle Y = {:.3f}  p1={}  p4={}".format(cur, p1, p4))
             if cur < -1:
                 p1 = p1-10
                 p4 = p4+10
@@ -49,6 +50,7 @@ class Adjustment():
             else:
                 pass
             self.mv.angle_control(p1, 2100, 800, p4)
+            time.sleep(0.1)
 
 
 if __name__ == '__main__':
