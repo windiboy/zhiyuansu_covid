@@ -14,7 +14,7 @@ class Adjustment():
         while True:
             datahex = self.sensor.ser.read(33)
             self.sensor.DueData(datahex)
-            print("Angle Y = {.3f}".format(self.sensor.a[1]))
+            print("Angle Y = {:.3f}".format(self.sensor.Angle[1]))
 
 
 if __name__ == '__main__':
