@@ -3,84 +3,78 @@ import serial
 
 class ImuSensor:
 
-    ACCData=[0.0]*8
-    GYROData=[0.0]*8
-    AngleData=[0.0]*8
-    FrameState = 0            #通过0x后面的值判断属于哪一种情况
-    Bytenum = 0               #读取到这一段的第几位
-    CheckSum = 0              #求和校验位
-
-    a = [0.0]*3
-    w = [0.0]*3
-    Angle = [0.0]*3
-
     def __init__(self):
         self.ser = serial.Serial("/dev/ttyUSB1", 115200, timeout=0.5)
         print(self.ser.is_open)
+        self.ACCData = [0.0] * 8
+        self.GYROData = [0.0] * 8
+        self.AngleData = [0.0] * 8
+        self.FrameState = 0  # 通过0x后面的值判断属于哪一种情况
+        self.Bytenum = 0  # 读取到这一段的第几位
+        self.CheckSum = 0  # 求和校验位
+
+        self.a = [0.0] * 3
+        self.w = [0.0] * 3
+        self.Angle = [0.0] * 3
 
     def DueData(self, inputdata):   #新增的核心程序，对读取的数据进行划分，各自读到对应的数组里
-        global  FrameState    #在局部修改全局变量，要进行global的定义
-        global  Bytenum
-        global  CheckSum
-        global  a
-        global  w
-        global  Angle
+
         for data in inputdata:  #在输入的数据进行遍历
-            if FrameState==0:   #当未确定状态的时候，进入以下判断
-                if data==0x55 and Bytenum==0: #0x55位于第一位时候，开始读取数据，增大bytenum
-                    CheckSum=data
-                    Bytenum=1
+            if self.FrameState==0:   #当未确定状态的时候，进入以下判断
+                if data==0x55 and self.Bytenum==0: #0x55位于第一位时候，开始读取数据，增大self.Bytenum
+                    self.CheckSum=data
+                    self.Bytenum=1
                     continue
-                elif data==0x51 and Bytenum==1:#在byte不为0 且 识别到 0x51 的时候，改变frame
-                    CheckSum+=data
-                    FrameState=1
-                    Bytenum=2
-                elif data==0x52 and Bytenum==1: #同理
-                    CheckSum+=data
-                    FrameState=2
-                    Bytenum=2
-                elif data==0x53 and Bytenum==1:
-                    CheckSum+=data
-                    FrameState=3
-                    Bytenum=2
-            elif FrameState==1: # acc    #已确定数据代表加速度
+                elif data==0x51 and self.Bytenum==1:#在byte不为0 且 识别到 0x51 的时候，改变frame
+                    self.CheckSum+=data
+                    self.FrameState=1
+                    self.Bytenum=2
+                elif data==0x52 and self.Bytenum==1: #同理
+                    self.CheckSum+=data
+                    self.FrameState=2
+                    self.Bytenum=2
+                elif data==0x53 and self.Bytenum==1:
+                    self.CheckSum+=data
+                    self.FrameState=3
+                    self.Bytenum=2
+            elif self.FrameState==1: # acc    #已确定数据代表加速度
 
-                if Bytenum<10:            # 读取8个数据
-                    ACCData[Bytenum-2]=data # 从0开始
-                    CheckSum+=data
-                    Bytenum+=1
+                if self.Bytenum<10:            # 读取8个数据
+                    self.ACCData[self.Bytenum-2]=data # 从0开始
+                    self.CheckSum+=data
+                    self.Bytenum+=1
                 else:
-                    if data == (CheckSum&0xff):  #假如校验位正确
-                        a = self.get_acc(ACCData)
-                    CheckSum=0                  #各数据归零，进行新的循环判断
-                    Bytenum=0
-                    FrameState=0
-            elif FrameState==2: # gyro
+                    if data == (self.CheckSum&0xff):  #假如校验位正确
+                        self.a = self.get_acc(self.ACCData)
+                    self.CheckSum=0                  #各数据归零，进行新的循环判断
+                    self.Bytenum=0
+                    self.FrameState=0
+            elif self.FrameState==2: # gyro
 
-                if Bytenum<10:
-                    GYROData[Bytenum-2]=data
-                    CheckSum+=data
-                    Bytenum+=1
+                if self.Bytenum<10:
+                    self.GYROData[self.Bytenum-2]=data
+                    self.CheckSum+=data
+                    self.Bytenum+=1
                 else:
-                    if data == (CheckSum&0xff):
-                        w = self.get_gyro(GYROData)
-                    CheckSum=0
-                    Bytenum=0
-                    FrameState=0
-            elif FrameState==3: # angle
+                    if data == (self.CheckSum&0xff):
+                    self.w = self.get_gyro(self.GYROData)
+                    self.CheckSum=0
+                    self.Bytenum=0
+                    self.FrameState=0
+            elif self.FrameState==3: # angle
 
-                if Bytenum<10:
-                    AngleData[Bytenum-2]=data
-                    CheckSum+=data
-                    Bytenum+=1
+                if self.Bytenum<10:
+                    self.AngleData[self.Bytenum-2]=data
+                    self.CheckSum+=data
+                    self.Bytenum+=1
                 else:
-                    if data == (CheckSum&0xff):
-                        Angle = self.get_angle(AngleData)
-                        d = a+w+Angle
+                    if data == (self.CheckSum&0xff):
+                    self.Angle = self.get_angle(self.AngleData)
+                        d = self.a+self.w+self.Angle
                         print("a(g):%10.3f %10.3f %10.3f w(deg/s):%10.3f %10.3f %10.3f Angle(deg):%10.3f %10.3f %10.3f"%d)
-                    CheckSum=0
-                    Bytenum=0
-                    FrameState=0
+                    self.CheckSum=0
+                    self.Bytenum=0
+                    self.FrameState=0
 
 
     def get_acc(self, datahex):
