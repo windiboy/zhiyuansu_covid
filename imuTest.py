@@ -12,12 +12,11 @@ class Adjustment():
 
         self.mv.angle_control(2200, 2100, 800, 1800)
         time.sleep(2)
-
-        datahex = self.sensor.ser.read(33)
-        self.sensor.DueData(datahex)
-        time.sleep(1)
-        self.offset = self.sensor.Angle[1]
-        print("Auto Adjustment Begin: origin value:{}".format(self.offset))
+        for i in range(10):
+            datahex = self.sensor.ser.read(33)
+            self.sensor.DueData(datahex)
+            self.offset = self.sensor.Angle[1]
+            print("Auto Adjustment Begin: origin value:{}".format(self.offset))
 
     def run(self):
         p1 = 2200
