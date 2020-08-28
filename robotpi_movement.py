@@ -117,14 +117,23 @@ class Movement:
         if self.isOpen:
             data = [0] * 22
 
-            data[1] = p1 & 0xFF
-            data[0] = (p1 >> 8) & 0xFF
-            data[3] = p2 & 0xFF
-            data[2] = (p2 >> 8) & 0xFF
-            data[5] = p3 & 0xFF
-            data[4] = (p3 >> 8) & 0xFF
-            data[7] = p4 & 0xFF
-            data[6] = (p4 >> 8) & 0xFF
+            # data[1] = p1 & 0xFF
+            # data[0] = (p1 >> 8) & 0xFF
+            # data[3] = p2 & 0xFF
+            # data[2] = (p2 >> 8) & 0xFF
+            # data[5] = p3 & 0xFF
+            # data[4] = (p3 >> 8) & 0xFF
+            # data[7] = p4 & 0xFF
+            # data[6] = (p4 >> 8) & 0xFF
+
+            data[0] = p1 & 0xFF
+            data[1] = (p1 >> 8) & 0xFF
+            data[2] = p2 & 0xFF
+            data[3] = (p2 >> 8) & 0xFF
+            data[4] = p3 & 0xFF
+            data[5] = (p3 >> 8) & 0xFF
+            data[6] = p4 & 0xFF
+            data[7] = (p4 >> 8) & 0xFF
 
             data[10] = 10 & 0xFF
 
