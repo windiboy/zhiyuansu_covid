@@ -113,6 +113,26 @@ class Movement:
             return True
         return False
 
+    def angle_control(self, p1, p2, p3, p4):
+        if self.isOpen:
+            data = [0] * 22
+
+            data[1] = p1 & 0xFF
+            data[0] = (p1 >> 8) & 0xFF
+            data[3] = p2 & 0xFF
+            data[2] = (p2 >> 8) & 0xFF
+            data[5] = p3 & 0xFF
+            data[4] = (p3 >> 8) & 0xFF
+            data[7] = p4 & 0xFF
+            data[6] = (p4 >> 8) & 0xFF
+
+            data[10] = 10 & 0xFF
+
+            buffer, len = self.cmd.GenerateCmd(0x07, 0x5F, 0x16, data)
+            self.action.write_serial(buffer)
+            return True
+        return False
+
     def hit(self):
         if self.isOpen:
             command = self.cmd.hit()
