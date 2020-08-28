@@ -17,7 +17,7 @@ class Adjustment():
         self.sensor.DueData(datahex)
         self.offset = self.sensor.Angle[1]
         time.sleep(1)
-        print("Auto Adjustment Begin:")
+        print("Auto Adjustment Begin: origin value:{}".format(self.offset))
 
     def run(self):
         p1 = 2200
